@@ -3,88 +3,68 @@ import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime
 
-# --- KONFIGURASI HALAMAN ---
+# 1. KONFIGURASI HALAMAN
 st.set_page_config(
     page_title="Hifza Moeslim Wear - Sharia Dashboard",
     page_icon="🌙",
-    layout="wide",
-    initial_sidebar_state="expanded",
+    layout="wide"
 )
 
-# --- STYLING CUSTOM (Deep Sea Green) ---
+# 2. STYLING CUSTOM (Deep Sea Green & White)
 st.markdown("""
     <style>
     .main { background-color: #ffffff; }
     div[data-testid="stMetricValue"] { color: #004d40; font-weight: bold; }
-    .stButton>button { background-color: #004d40; color: white; border-radius: 8px; }
-    div[data-testid="stSidebar"] { background-color: #004d40; color: white; }
+    div[data-testid="stSidebar"] { background-color: #004d40; }
+    .st-emotion-cache-16idsys p { color: white; } /* Sidebar text */
     </style>
     """, unsafe_allow_html=True)
 
-# --- DATA MOCKUP ---
+# 3. DATA MOCKUP
 def get_revenue_data():
     return pd.DataFrame({
         "Bulan": ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
         "Revenue": [4500000, 5200000, 4800000, 6100000, 5900000, 7500000]
     })
 
-# --- SIDEBAR NAVIGASI ---
+# 4. SIDEBAR NAVIGASI
 with st.sidebar:
     st.markdown("### 💠 **Hifza Moeslim Wear**")
     st.caption("Sistem Manajemen Syariah")
     st.divider()
-    menu = st.radio("Menu Utama", ["Dashboard", "Penjualan", "Produk", "Laporan", "Audit", "Pengaturan"])
-    st.divider()
-    st.write("**Status Audit:** 🟢 98.4% Patuh")
-    if st.button("Jalankan Audit Baru"):
-        with st.spinner("Menganalisis transaksi..."):
-            st.success("Audit Selesai: Sesuai Syariah!")
+    menu = st.radio("Menu Utama", ["Dashboard", "Penjualan", "Produk", "Laporan", "Audit", "Settings"])
 
-# --- HALAMAN DASHBOARD ---
+# 5. HALAMAN DASHBOARD
 if menu == "Dashboard":
-    st.title("🌙 Dashboard Bisnis Syariah")
-    st.write(f"Selamat datang kembali, **Admin**. Hari ini: {datetime.now().strftime('%d %B %Y')}")
+    st.title("🌙 Sharia Accounting Dashboard")
+    st.write(f"Sesi Aktif: **Admin** | {datetime.now().strftime('%d %B %Y')}")
 
-    # 1. Baris Metrik (Stat Cards)
+    # Baris Metrik (Stat Cards)
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Total Penjualan", "Rp 34.2M", "+12%")
     m2.metric("Produk Terjual", "1,284", "+5%")
     m3.metric("Laba Bersih", "Rp 8.4M", "+18%")
-    m4.metric("Estimasi Zakat", "Rp 2.1M", "2.5%")
+    m4.metric("Zakat Mal", "Rp 2.1M", "2.5%")
 
-    st.write("") # Spacer
+    st.divider()
 
-    # 2. Konten Utama (Grafik & Stok)
-    col_chart, col_stock = st.columns([2, 1])
+    # Grafik & Tabel
+    col_left, col_right = st.columns([2, 1])
 
-    with col_chart:
-        st.subheader("Pertumbuhan Pendapatan")
+    with col_left:
+        st.subheader("📈 Pertumbuhan Pendapatan")
         df = get_revenue_data()
         fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x=df["Bulan"], y=df["Revenue"], 
-            fill='tozeroy', mode='lines+markers',
-            line=dict(color='#004d40', width=3),
-            fillcolor='rgba(0, 77, 64, 0.1)'
-        ))
-        fig.update_layout(margin=dict(l=0, r=0, t=20, b=0), height=300)
+        fig.add_trace(go.Scatter(x=df["Bulan"], y=df["Revenue"], fill='tozeroy', line=dict(color='#004d40')))
         st.plotly_chart(fig, use_container_width=True)
 
-    with col_stock:
-        st.subheader("Kesehatan Stok")
-        st.info("**Produk Aman: 42**")
-        st.warning("**Butuh Restock: 8**")
-        st.progress(84)
+    with col_right:
+        st.subheader("📋 Transaksi Terakhir")
+        st.table({
+            "User": ["Ibu Rahma", "Siti Aminah", "Bpk. Yusuf"],
+            "Status": ["✅ Syariah", "✅ Syariah", "⚠️ Review"]
+        })
 
-    # 3. Tabel Transaksi Terakhir
-    st.subheader("Transaksi Terakhir")
-    trx_df = pd.DataFrame([
-        {"ID": "#TRX-001", "Pelanggan": "Ibu Rahma", "Total": "Rp 450.000", "Metode": "Transfer", "Status": "✅ Sharia Compliant"},
-        {"ID": "#TRX-002", "Pelanggan": "Siti Aminah", "Total": "Rp 1.200.000", "Metode": "E-Wallet", "Status": "✅ Sharia Compliant"},
-        {"ID": "#TRX-003", "Pelanggan": "Bpk. Yusuf", "Total": "Rp 350.000", "Metode": "Cash", "Status": "⚠️ Manual Review Needed"},
-    ])
-    st.dataframe(trx_df, use_container_width=True, hide_index=True)
+else:
+    st.info(f"Halaman {menu} sedang dalam pengembangan.")
 
-# --- FOOTER ---
-st.divider()
-st.caption("© 2026 Hifza Moeslim Wear - Powered by Sharia-Compliant AI")
