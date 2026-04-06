@@ -1,24 +1,65 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Hifza Sharia Accounting Dashboard</title>
-</head>
-<body>
-  <h1>Hifza Moslem Wear Dashboard</h1>
-  <p>Sistem Informasi Akuntansi Berbasis Syariah</p>
+import streamlit as st
+import pandas as pd
+import plotly.express as px
 
-  <h2>Ringkasan</h2>
-  <ul>
-    <li>Total Penjualan: Rp 10.000.000</li>
-    <li>Total Transaksi: 50</li>
-    <li>Stok Barang: 120 pcs</li>
-  </ul>
+# 1. Konfigurasi Halaman & Tema (Deep Sea Green & White)
+st.set_page_config(page_title="Hifza Moeslim Wear - Sharia Dashboard", layout="wide")
 
-  <h2>Status Syariah</h2>
-  <p>✔ Transaksi sesuai prinsip syariah (Amanah & Transparan)</p>
-</body>
-</html>
-git add .
-git commit -m "update index.html"
-git push
+st.markdown("""
+    <style>
+    :root {
+        --primary-color: #004d40; /* Deep Sea Green */
+    }
+    .main { background-color: #ffffff; }
+    .stMetric { background-color: #f1f8e9; padding: 15px; border-radius: 10px; border-left: 5px solid #004d40; }
+    div[data-testid="stSidebar"] { background-color: #004d40; }
+    div[data-testid="stSidebar"] * { color: white; }
+    </style>
+    """, unsafe_allow_html=True)
+
+# 2. Sidebar Navigation
+st.sidebar.title("Hifza Moeslim Wear")
+st.sidebar.subheader("Islamic Digital Banking")
+menu = st.sidebar.radio("Menus", ["Overview", "Mudharabah Contracts", "Zakat Management", "Automated Audit", "Settings"])
+
+if menu == "Overview":
+    st.title("🌙 Sharia Accounting Dashboard")
+    
+    # 3. Stats Cards (4 Columns)
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric("Total Assets", "Rp 2.4B", "+12%")
+    with col2:
+        st.metric("Total Financing", "Rp 1.8B", "+5.4%")
+    with col3:
+        st.metric("Total Social Funds (ZIS)", "Rp 450M", "Stable")
+    with col4:
+        st.metric("AI Audit Health Score", "98/100", "Excellent")
+
+    st.divider()
+
+    # 4. Revenue Growth Line Chart
+    st.subheader("📈 Revenue Growth (Monthly)")
+    chart_data = pd.DataFrame({
+        'Month': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        'Revenue': [150, 180, 210, 190, 250, 300]
+    })
+    fig = px.line(chart_data, x='Month', y='Revenue', markers=True, color_discrete_sequence=['#004d40'])
+    st.plotly_chart(fig, use_container_width=True)
+
+    # 5. Recent Transactions Table with Badges
+    st.subheader("📋 Recent Transactions")
+    
+    data = {
+        "Date": ["2026-04-01", "2026-04-02", "2026-04-03", "2026-04-05"],
+        "Customer": ["Ahmad Fauzi", "Siti Aminah", "Budi Santoso", "Laila Majnun"],
+        "Amount": ["Rp 5.000.000", "Rp 12.500.000", "Rp 750.000", "Rp 3.200.000"],
+        "Status": ["✅ Sharia Compliant", "✅ Sharia Compliant", "⚠️ Manual Review Needed", "✅ Sharia Compliant"]
+    }
+    df = pd.DataFrame(data)
+    
+    # Menampilkan tabel dengan styling
+    st.table(df)
+
+else:
+    st.info(f"Halaman {menu} sedang dalam pengembangan untuk Hifza Moeslim Wear.")
