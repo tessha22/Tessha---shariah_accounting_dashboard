@@ -1,160 +1,160 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>Hifza Sharia Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+import streamlit as st
+import pandas as pd
+import plotly.express as px
 
+# ======================
+# CONFIG HALAMAN
+# ======================
+st.set_page_config(
+    page_title="Hifza Moslem Wear - Sharia Dashboard",
+    page_icon="🧕",
+    layout="wide"
+)
+
+# ======================
+# STYLE (WARNA BIRU ELEGAN)
+# ======================
+st.markdown("""
 <style>
 body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #f5f7fb;
+    background-color: #f4f7fb;
 }
-
-/* Sidebar */
-.sidebar {
-  width: 220px;
-  height: 100vh;
-  background: #1e3a8a;
-  color: white;
-  position: fixed;
-  padding: 20px;
+.stMetric {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
 }
-
-/* Main */
-.main {
-  margin-left: 240px;
-  padding: 20px;
-}
-
-/* Cards */
-.cards {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  width: 200px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
-
-/* Filter */
-.filter {
-  margin-top: 20px;
-}
-
-/* Chart */
-.chart {
-  background: white;
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 12px;
+.sidebar .sidebar-content {
+    background-color: #1e3a8a;
 }
 </style>
-</head>
+""", unsafe_allow_html=True)
 
-<body>
+# ======================
+# LOGIN SEDERHANA
+# ======================
+if "login" not in st.session_state:
+    st.session_state.login = False
 
-<div class="sidebar">
-  <h2>Hifza</h2>
-  <p>Moslem Wear</p>
-</div>
+if not st.session_state.login:
+    st.title("🔐 Login Sistem")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
 
-<div class="main">
+    if st.button("Login"):
+        if username == "admin" and password == "123":
+            st.session_state.login = True
+            st.success("Login berhasil!")
+            st.rerun()
+        else:
+            st.error("Username atau password salah")
+    st.stop()
 
-<h1>Dashboard</h1>
+# ======================
+# SIDEBAR MENU
+# ======================
+st.sidebar.title("🧕 Hifza Moslem Wear")
+menu = st.sidebar.radio("Menu", [
+    "Overview",
+    "Penjualan",
+    "Laporan",
+    "Zakat",
+    "Audit Syariah"
+])
 
-<!-- FILTER -->
-<div class="filter">
-  <label>Pilih Bulan:</label>
-  <select id="monthFilter">
-    <option value="all">Semua</option>
-    <option value="0">Jan</option>
-    <option value="1">Feb</option>
-    <option value="2">Mar</option>
-    <option value="3">Apr</option>
-    <option value="4">Mei</option>
-    <option value="5">Jun</option>
-  </select>
-</div>
+# ======================
+# DATA DUMMY
+# ======================
+data = pd.DataFrame({
+    "Bulan": ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+    "Penjualan": [1000000, 1200000, 900000, 1500000, 1700000, 2000000]
+})
 
-<!-- KPI -->
-<div class="cards">
-  <div class="card">
-    <h3>Total Penjualan</h3>
-    <p id="totalSales">-</p>
-  </div>
+transaksi = pd.DataFrame({
+    "Tanggal": ["01-04-2026", "02-04-2026", "03-04-2026"],
+    "Produk": ["Gamis", "Khimar", "Hijab"],
+    "Jumlah": [2, 1, 3],
+    "Total": [300000, 150000, 225000],
+    "Status": ["✔ Syariah", "✔ Syariah", "⚠ Review"]
+})
 
-  <div class="card">
-    <h3>Laba Bersih</h3>
-    <p id="profit">-</p>
-  </div>
+# ======================
+# OVERVIEW
+# ======================
+if menu == "Overview":
+    st.title("📊 Dashboard")
 
-  <div class="card">
-    <h3>Zakat</h3>
-    <p id="zakat">-</p>
-  </div>
-</div>
+    col1, col2, col3, col4 = st.columns(4)
 
-<!-- CHART -->
-<div class="chart">
-  <canvas id="salesChart"></canvas>
-</div>
+    col1.metric("Total Penjualan", "Rp 1.150.000", "+12%")
+    col2.metric("Produk Terjual", "245", "+8%")
+    col3.metric("Laba Bersih", "Rp 350.000", "+10%")
+    col4.metric("Zakat", "Rp 28.750", "+5%")
 
-</div>
+    st.markdown("### 📈 Pertumbuhan Penjualan")
+    fig = px.line(
+        data,
+        x="Bulan",
+        y="Penjualan",
+        markers=True,
+        title="Grafik Penjualan",
+        color_discrete_sequence=["#2563eb"]
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
-<script>
-const dataPenjualan = [450000, 520000, 480000, 610000, 590000, 750000];
+    st.markdown("### 📋 Transaksi Terakhir")
+    st.dataframe(transaksi)
 
-function updateDashboard(index) {
-  let data;
+# ======================
+# PENJUALAN
+# ======================
+elif menu == "Penjualan":
+    st.title("🛒 Data Penjualan")
+    st.dataframe(transaksi)
 
-  if (index === "all") {
-    data = dataPenjualan;
-  } else {
-    data = [dataPenjualan[index]];
-  }
+# ======================
+# LAPORAN KEUANGAN
+# ======================
+elif menu == "Laporan":
+    st.title("📑 Laporan Keuangan")
 
-  const total = data.reduce((a, b) => a + b, 0);
-  const profit = total * 0.3;
-  const zakat = profit * 0.025;
+    st.subheader("Laporan Laba Rugi")
+    st.write("""
+    - Pendapatan: Rp 1.150.000  
+    - HPP: Rp 600.000  
+    - Laba Bersih: Rp 350.000  
+    """)
 
-  document.getElementById("totalSales").innerText = "Rp " + total.toLocaleString();
-  document.getElementById("profit").innerText = "Rp " + profit.toLocaleString();
-  document.getElementById("zakat").innerText = "Rp " + zakat.toLocaleString();
+    st.subheader("Laporan Posisi Keuangan")
+    st.write("""
+    - Aset: Rp 5.000.000  
+    - Kewajiban: Rp 1.500.000  
+    - Ekuitas: Rp 3.500.000  
+    """)
 
-  chart.data.datasets[0].data = data;
-  chart.update();
-}
+# ======================
+# ZAKAT
+# ======================
+elif menu == "Zakat":
+    st.title("🕌 Perhitungan Zakat")
 
-const ctx = document.getElementById('salesChart').getContext('2d');
+    laba = st.number_input("Masukkan Laba Bersih", value=350000)
+    zakat = laba * 0.025
 
-const chart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['Jan','Feb','Mar','Apr','Mei','Jun'],
-    datasets: [{
-      label: 'Penjualan',
-      data: dataPenjualan,
-      borderColor: '#3b82f6',
-      backgroundColor: 'rgba(59,130,246,0.2)',
-      fill: true,
-      tension: 0.4
-    }]
-  }
-});
+    st.success(f"Zakat yang harus dibayar: Rp {zakat:,.0f}")
 
-document.getElementById("monthFilter").addEventListener("change", function() {
-  updateDashboard(this.value);
-});
+# ======================
+# AUDIT SYARIAH
+# ======================
+elif menu == "Audit Syariah":
+    st.title("🛡 Audit Syariah")
 
-updateDashboard("all");
-</script>
+    st.metric("AI Audit Score", "98%", "Healthy")
 
-</body>
-</html>
+    st.write("""
+    ✔ Tidak ada riba  
+    ✔ Transaksi transparan  
+    ✔ Sesuai prinsip syariah  
+    ⚠ Beberapa transaksi perlu review  
+    """)
