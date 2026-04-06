@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
+<head><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <meta charset="UTF-8">
 <title>Hifza Sharia Dashboard</title>
 
-<style>
+<style> <canvas id="salesChart"></canvas>
+  <script>
+const ctx = document.getElementById('salesChart').getContext('2d');
+
+const salesChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+        datasets: [{
+            label: 'Penjualan (Rp)',
+            data: [450000, 520000, 480000, 610000, 590000, 750000],
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59,130,246,0.2)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true
+            }
+        }
+    }
+});
+</script>
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
