@@ -1,36 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
-<head><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<head>
 <meta charset="UTF-8">
 <title>Hifza Sharia Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<style> <canvas id="salesChart"></canvas>
-  <script>
-const ctx = document.getElementById('salesChart').getContext('2d');
-
-const salesChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
-        datasets: [{
-            label: 'Penjualan (Rp)',
-            data: [450000, 520000, 480000, 610000, 590000, 750000],
-            borderColor: '#3b82f6',
-            backgroundColor: 'rgba(59,130,246,0.2)',
-            tension: 0.4,
-            fill: true
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: true
-            }
-        }
-    }
-});
-</script>
+<style>
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -47,42 +22,10 @@ body {
   padding: 20px;
 }
 
-.sidebar h2 {
-  font-size: 18px;
-}
-
-.menu {
-  margin-top: 30px;
-}
-
-.menu div {
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.menu div:hover {
-  background: #3b82f6;
-}
-
 /* Main */
 .main {
   margin-left: 240px;
   padding: 20px;
-}
-
-/* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.search {
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
 }
 
 /* Cards */
@@ -100,84 +43,118 @@ body {
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
-.card h3 {
-  margin: 0;
-  color: #555;
+/* Filter */
+.filter {
+  margin-top: 20px;
 }
 
-.card p {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-/* Chart box */
+/* Chart */
 .chart {
   background: white;
-  margin-top: 30px;
+  margin-top: 20px;
   padding: 20px;
   border-radius: 12px;
 }
 </style>
-
 </head>
 
 <body>
 
-<!-- Sidebar -->
 <div class="sidebar">
   <h2>Hifza</h2>
   <p>Moslem Wear</p>
-
-  <div class="menu">
-    <div>Overview</div>
-    <div>Penjualan</div>
-    <div>Stok Barang</div>
-    <div>Laporan</div>
-    <div>Zakat</div>
-    <div>Audit Syariah</div>
-  </div>
 </div>
 
-<!-- Main -->
 <div class="main">
 
-  <!-- Header -->
-  <div class="header">
-    <h1>Dashboard</h1>
-    <input class="search" placeholder="Cari..." />
+<h1>Dashboard</h1>
+
+<!-- FILTER -->
+<div class="filter">
+  <label>Pilih Bulan:</label>
+  <select id="monthFilter">
+    <option value="all">Semua</option>
+    <option value="0">Jan</option>
+    <option value="1">Feb</option>
+    <option value="2">Mar</option>
+    <option value="3">Apr</option>
+    <option value="4">Mei</option>
+    <option value="5">Jun</option>
+  </select>
+</div>
+
+<!-- KPI -->
+<div class="cards">
+  <div class="card">
+    <h3>Total Penjualan</h3>
+    <p id="totalSales">-</p>
   </div>
 
-  <!-- Cards -->
-  <div class="cards">
-    <div class="card">
-      <h3>Total Penjualan</h3>
-      <p>Rp 1.150.000</p>
-    </div>
-
-    <div class="card">
-      <h3>Produk Terjual</h3>
-      <p>245</p>
-    </div>
-
-    <div class="card">
-      <h3>Laba Bersih</h3>
-      <p>Rp 350.000</p>
-    </div>
-
-    <div class="card">
-      <h3>Zakat</h3>
-      <p>Rp 28.750</p>
-    </div>
+  <div class="card">
+    <h3>Laba Bersih</h3>
+    <p id="profit">-</p>
   </div>
 
-  <!-- Chart -->
-  <div class="chart">
-    <h3>Pertumbuhan Penjualan</h3>
-    <p>(Simulasi grafik)</p>
+  <div class="card">
+    <h3>Zakat</h3>
+    <p id="zakat">-</p>
   </div>
+</div>
+
+<!-- CHART -->
+<div class="chart">
+  <canvas id="salesChart"></canvas>
+</div>
 
 </div>
+
+<script>
+const dataPenjualan = [450000, 520000, 480000, 610000, 590000, 750000];
+
+function updateDashboard(index) {
+  let data;
+
+  if (index === "all") {
+    data = dataPenjualan;
+  } else {
+    data = [dataPenjualan[index]];
+  }
+
+  const total = data.reduce((a, b) => a + b, 0);
+  const profit = total * 0.3;
+  const zakat = profit * 0.025;
+
+  document.getElementById("totalSales").innerText = "Rp " + total.toLocaleString();
+  document.getElementById("profit").innerText = "Rp " + profit.toLocaleString();
+  document.getElementById("zakat").innerText = "Rp " + zakat.toLocaleString();
+
+  chart.data.datasets[0].data = data;
+  chart.update();
+}
+
+const ctx = document.getElementById('salesChart').getContext('2d');
+
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['Jan','Feb','Mar','Apr','Mei','Jun'],
+    datasets: [{
+      label: 'Penjualan',
+      data: dataPenjualan,
+      borderColor: '#3b82f6',
+      backgroundColor: 'rgba(59,130,246,0.2)',
+      fill: true,
+      tension: 0.4
+    }]
+  }
+});
+
+document.getElementById("monthFilter").addEventListener("change", function() {
+  updateDashboard(this.value);
+});
+
+updateDashboard("all");
+</script>
 
 </body>
 </html>
