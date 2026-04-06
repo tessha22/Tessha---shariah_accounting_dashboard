@@ -4,81 +4,81 @@
 <meta charset="UTF-8">
 <title>Hifza Sharia Dashboard</title>
 
-<!-- Google Font Elegant -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<!-- FONT BARU (LEBIH ELEGAN & PROFESIONAL) -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to right, #eef2ff, #f8fafc);
+    font-family: 'Inter', sans-serif;
+    background: #f4f6fb;
     margin: 0;
 }
 
+/* Sidebar */
 .sidebar {
     width: 220px;
     height: 100vh;
-    background: linear-gradient(180deg, #1e3a8a, #2563eb);
+    background: #1e3a8a;
     color: white;
     position: fixed;
     padding: 20px;
 }
 
 .sidebar h2 {
-    margin-bottom: 30px;
+    font-weight: 600;
 }
 
+/* Menu */
 .sidebar a {
     display: block;
+    margin: 12px 0;
     color: white;
     text-decoration: none;
-    margin: 12px 0;
-    transition: 0.3s;
-}
-
-.sidebar a:hover {
-    transform: translateX(5px);
     opacity: 0.8;
 }
 
+.sidebar a:hover {
+    opacity: 1;
+}
+
+/* Main */
 .main {
     margin-left: 240px;
     padding: 25px;
 }
 
+/* Cards */
 .card {
     display: inline-block;
     background: white;
-    padding: 20px;
+    padding: 18px;
     margin: 10px;
-    border-radius: 12px;
+    border-radius: 10px;
     width: 220px;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-5px);
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
 }
 
 .value {
-    font-size: 22px;
-    font-weight: 700;
-    color: #1e3a8a;
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 5px;
 }
 
-canvas {
+/* Chart */
+.chart-box {
     background: white;
-    border-radius: 12px;
+    border-radius: 10px;
     padding: 20px;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
     <h2>Hifza</h2>
     <a href="#">Overview</a>
@@ -88,69 +88,45 @@ canvas {
     <a href="#">Audit</a>
 </div>
 
+<!-- Main -->
 <div class="main">
-    <h1>Dashboard</h1>
 
-    <!-- KPI -->
-    <div class="card">
-        Total Penjualan<br>
-        <div class="value" id="sales">0</div>
-    </div>
+<h1>Dashboard</h1>
 
-    <div class="card">
-        Produk Terjual<br>
-        <div class="value" id="produk">0</div>
-    </div>
+<!-- KPI -->
+<div class="card">
+    Total Penjualan
+    <div class="value">Rp 1.150.000</div>
+</div>
 
-    <div class="card">
-        Laba Bersih<br>
-        <div class="value" id="laba">0</div>
-    </div>
+<div class="card">
+    Produk Terjual
+    <div class="value">245</div>
+</div>
 
-    <div class="card">
-        Zakat<br>
-        <div class="value" id="zakat">0</div>
-    </div>
+<div class="card">
+    Laba Bersih
+    <div class="value">Rp 350.000</div>
+</div>
 
-    <!-- Grafik -->
-    <h3>📈 Pertumbuhan Penjualan</h3>
+<div class="card">
+    Zakat
+    <div class="value">Rp 28.750</div>
+</div>
+
+<!-- Chart -->
+<div class="chart-box">
+    <h3>Pertumbuhan Penjualan</h3>
     <canvas id="chart"></canvas>
+</div>
 
-    <!-- AI Audit -->
-    <h3>🛡 AI Audit Score</h3>
-    <h2 style="color:#2563eb;">98% ✔ Healthy</h2>
+<!-- Audit -->
+<h3 style="margin-top:25px;">AI Audit Score</h3>
+<h2 style="color:#1e3a8a;">98% ✔ Healthy</h2>
 
 </div>
 
 <script>
-// ======================
-// ANIMASI KPI (COUNTER)
-// ======================
-function animateValue(id, start, end, duration, prefix="") {
-    let range = end - start;
-    let current = start;
-    let increment = end > start ? 1 : -1;
-    let stepTime = Math.abs(Math.floor(duration / range));
-    let obj = document.getElementById(id);
-
-    let timer = setInterval(function() {
-        current += increment;
-        obj.innerHTML = prefix + current.toLocaleString();
-        if (current == end) {
-            clearInterval(timer);
-        }
-    }, stepTime);
-}
-
-// Jalankan animasi
-animateValue("sales", 0, 1150000, 1500, "Rp ");
-animateValue("produk", 0, 245, 1000);
-animateValue("laba", 0, 350000, 1200, "Rp ");
-animateValue("zakat", 0, 28750, 1200, "Rp ");
-
-// ======================
-// GRAFIK
-// ======================
 const ctx = document.getElementById('chart');
 
 new Chart(ctx, {
@@ -158,17 +134,46 @@ new Chart(ctx, {
     data: {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
         datasets: [{
-            label: 'Penjualan',
+            label: 'Penjualan (Rp)',
             data: [1000000, 1200000, 900000, 1500000, 1700000, 2000000],
-            borderColor: '#2563eb',
-            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+            borderColor: '#1e3a8a',
+            backgroundColor: 'rgba(30,58,138,0.1)',
+            fill: true,
             tension: 0.4,
-            fill: true
+            pointRadius: 5,
+            pointHoverRadius: 8
         }]
     },
     options: {
+        responsive: true,
+        interaction: {
+            mode: 'nearest',
+            intersect: false
+        },
+        plugins: {
+            tooltip: {
+                enabled: true,
+                backgroundColor: '#1e3a8a',
+                titleColor: '#fff',
+                bodyColor: '#fff',
+                callbacks: {
+                    label: function(context) {
+                        return 'Rp ' + context.parsed.y.toLocaleString();
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                ticks: {
+                    callback: function(value) {
+                        return 'Rp ' + value.toLocaleString();
+                    }
+                }
+            }
+        },
         animation: {
-            duration: 2000
+            duration: 1500
         }
     }
 });
