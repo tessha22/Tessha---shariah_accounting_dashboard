@@ -1,160 +1,124 @@
-import streamlit as st
-import pandas as pd
-import plotly.express as px
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Hifza Sharia Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-# ======================
-# CONFIG HALAMAN
-# ======================
-st.set_page_config(
-    page_title="Hifza Moslem Wear - Sharia Dashboard",
-    page_icon="🧕",
-    layout="wide"
-)
-
-# ======================
-# STYLE (WARNA BIRU ELEGAN)
-# ======================
-st.markdown("""
 <style>
 body {
-    background-color: #f4f7fb;
+    font-family: Arial;
+    background: #f4f7fb;
+    margin: 0;
 }
-.stMetric {
-    background-color: #ffffff;
+
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background: #1e3a8a;
+    color: white;
+    position: fixed;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    margin: 10px 0;
+}
+
+.main {
+    margin-left: 240px;
+    padding: 20px;
+}
+
+.card {
+    display: inline-block;
+    background: white;
     padding: 15px;
+    margin: 10px;
     border-radius: 10px;
-    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    width: 200px;
 }
-.sidebar .sidebar-content {
-    background-color: #1e3a8a;
+
+canvas {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
 }
 </style>
-""", unsafe_allow_html=True)
+</head>
 
-# ======================
-# LOGIN SEDERHANA
-# ======================
-if "login" not in st.session_state:
-    st.session_state.login = False
+<body>
 
-if not st.session_state.login:
-    st.title("🔐 Login Sistem")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+<div class="sidebar">
+    <h2>Hifza</h2>
+    <a href="#">Overview</a>
+    <a href="#">Penjualan</a>
+    <a href="#">Laporan</a>
+    <a href="#">Zakat</a>
+    <a href="#">Audit</a>
+</div>
 
-    if st.button("Login"):
-        if username == "admin" and password == "123":
-            st.session_state.login = True
-            st.success("Login berhasil!")
-            st.rerun()
-        else:
-            st.error("Username atau password salah")
-    st.stop()
+<div class="main">
+    <h1>Dashboard</h1>
 
-# ======================
-# SIDEBAR MENU
-# ======================
-st.sidebar.title("🧕 Hifza Moslem Wear")
-menu = st.sidebar.radio("Menu", [
-    "Overview",
-    "Penjualan",
-    "Laporan",
-    "Zakat",
-    "Audit Syariah"
-])
+    <div class="card">Total Penjualan<br><b>Rp 1.150.000</b></div>
+    <div class="card">Produk Terjual<br><b>245</b></div>
+    <div class="card">Laba Bersih<br><b>Rp 350.000</b></div>
+    <div class="card">Zakat<br><b>Rp 28.750</b></div>
 
-# ======================
-# DATA DUMMY
-# ======================
-data = pd.DataFrame({
-    "Bulan": ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
-    "Penjualan": [1000000, 1200000, 900000, 1500000, 1700000, 2000000]
-})
+    <h3>Grafik Penjualan</h3>
+    <canvas id="chart"></canvas>
 
-transaksi = pd.DataFrame({
-    "Tanggal": ["01-04-2026", "02-04-2026", "03-04-2026"],
-    "Produk": ["Gamis", "Khimar", "Hijab"],
-    "Jumlah": [2, 1, 3],
-    "Total": [300000, 150000, 225000],
-    "Status": ["✔ Syariah", "✔ Syariah", "⚠ Review"]
-})
+    <h3>Transaksi</h3>
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Tanggal</th>
+            <th>Produk</th>
+            <th>Total</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>01-04-2026</td>
+            <td>Gamis</td>
+            <td>300000</td>
+            <td>✔ Syariah</td>
+        </tr>
+        <tr>
+            <td>02-04-2026</td>
+            <td>Khimar</td>
+            <td>150000</td>
+            <td>✔ Syariah</td>
+        </tr>
+    </table>
 
-# ======================
-# OVERVIEW
-# ======================
-if menu == "Overview":
-    st.title("📊 Dashboard")
+    <h3>AI Audit Score</h3>
+    <h2>98% ✔ Healthy</h2>
 
-    col1, col2, col3, col4 = st.columns(4)
+</div>
 
-    col1.metric("Total Penjualan", "Rp 1.150.000", "+12%")
-    col2.metric("Produk Terjual", "245", "+8%")
-    col3.metric("Laba Bersih", "Rp 350.000", "+10%")
-    col4.metric("Zakat", "Rp 28.750", "+5%")
+<script>
+const ctx = document.getElementById('chart');
 
-    st.markdown("### 📈 Pertumbuhan Penjualan")
-    fig = px.line(
-        data,
-        x="Bulan",
-        y="Penjualan",
-        markers=True,
-        title="Grafik Penjualan",
-        color_discrete_sequence=["#2563eb"]
-    )
-    st.plotly_chart(fig, use_container_width=True)
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+        datasets: [{
+            label: 'Penjualan',
+            data: [1000000, 1200000, 900000, 1500000, 1700000, 2000000],
+            borderColor: '#2563eb',
+            fill: false
+        }]
+    }
+});
+</script>
 
-    st.markdown("### 📋 Transaksi Terakhir")
-    st.dataframe(transaksi)
-
-# ======================
-# PENJUALAN
-# ======================
-elif menu == "Penjualan":
-    st.title("🛒 Data Penjualan")
-    st.dataframe(transaksi)
-
-# ======================
-# LAPORAN KEUANGAN
-# ======================
-elif menu == "Laporan":
-    st.title("📑 Laporan Keuangan")
-
-    st.subheader("Laporan Laba Rugi")
-    st.write("""
-    - Pendapatan: Rp 1.150.000  
-    - HPP: Rp 600.000  
-    - Laba Bersih: Rp 350.000  
-    """)
-
-    st.subheader("Laporan Posisi Keuangan")
-    st.write("""
-    - Aset: Rp 5.000.000  
-    - Kewajiban: Rp 1.500.000  
-    - Ekuitas: Rp 3.500.000  
-    """)
-
-# ======================
-# ZAKAT
-# ======================
-elif menu == "Zakat":
-    st.title("🕌 Perhitungan Zakat")
-
-    laba = st.number_input("Masukkan Laba Bersih", value=350000)
-    zakat = laba * 0.025
-
-    st.success(f"Zakat yang harus dibayar: Rp {zakat:,.0f}")
-
-# ======================
-# AUDIT SYARIAH
-# ======================
-elif menu == "Audit Syariah":
-    st.title("🛡 Audit Syariah")
-
-    st.metric("AI Audit Score", "98%", "Healthy")
-
-    st.write("""
-    ✔ Tidak ada riba  
-    ✔ Transaksi transparan  
-    ✔ Sesuai prinsip syariah  
-    ⚠ Beberapa transaksi perlu review  
-    """)
+</body>
+</html>
