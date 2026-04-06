@@ -1,70 +1,35 @@
-import streamlit as st
-import pandas as pd
-import plotly.graph_objects as go
-from datetime import datetime
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hifza Dashboard</title>
+  <style>
+    body { font-family: Arial; background: #f5f5f5; padding: 20px; }
+    .card { background: white; padding: 20px; margin: 10px; border-radius: 10px; display: inline-block; }
+  </style>
+</head>
+<body>
 
-# 1. KONFIGURASI HALAMAN
-st.set_page_config(
-    page_title="Hifza Moeslim Wear - Sharia Dashboard",
-    page_icon="🌙",
-    layout="wide"
-)
+<h1>Hifza Moslem Wear Dashboard</h1>
 
-# 2. STYLING CUSTOM (Deep Sea Green & White)
-st.markdown("""
-    <style>
-    .main { background-color: #ffffff; }
-    div[data-testid="stMetricValue"] { color: #004d40; font-weight: bold; }
-    div[data-testid="stSidebar"] { background-color: #004d40; }
-    .st-emotion-cache-16idsys p { color: white; } /* Sidebar text */
-    </style>
-    """, unsafe_allow_html=True)
+<div class="card">
+  <h3>Total Penjualan</h3>
+  <p>Rp 34.2M</p>
+</div>
 
-# 3. DATA MOCKUP
-def get_revenue_data():
-    return pd.DataFrame({
-        "Bulan": ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
-        "Revenue": [4500000, 5200000, 4800000, 6100000, 5900000, 7500000]
-    })
+<div class="card">
+  <h3>Produk Terjual</h3>
+  <p>1,284</p>
+</div>
 
-# 4. SIDEBAR NAVIGASI
-with st.sidebar:
-    st.markdown("### 💠 **Hifza Moeslim Wear**")
-    st.caption("Sistem Manajemen Syariah")
-    st.divider()
-    menu = st.radio("Menu Utama", ["Dashboard", "Penjualan", "Produk", "Laporan", "Audit", "Settings"])
+<div class="card">
+  <h3>Laba Bersih</h3>
+  <p>Rp 8.4M</p>
+</div>
 
-# 5. HALAMAN DASHBOARD
-if menu == "Dashboard":
-    st.title("🌙 Sharia Accounting Dashboard")
-    st.write(f"Sesi Aktif: **Admin** | {datetime.now().strftime('%d %B %Y')}")
+<div class="card">
+  <h3>Zakat</h3>
+  <p>Rp 2.1M</p>
+</div>
 
-    # Baris Metrik (Stat Cards)
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Total Penjualan", "Rp 34.2M", "+12%")
-    m2.metric("Produk Terjual", "1,284", "+5%")
-    m3.metric("Laba Bersih", "Rp 8.4M", "+18%")
-    m4.metric("Zakat Mal", "Rp 2.1M", "2.5%")
-
-    st.divider()
-
-    # Grafik & Tabel
-    col_left, col_right = st.columns([2, 1])
-
-    with col_left:
-        st.subheader("📈 Pertumbuhan Pendapatan")
-        df = get_revenue_data()
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df["Bulan"], y=df["Revenue"], fill='tozeroy', line=dict(color='#004d40')))
-        st.plotly_chart(fig, use_container_width=True)
-
-    with col_right:
-        st.subheader("📋 Transaksi Terakhir")
-        st.table({
-            "User": ["Ibu Rahma", "Siti Aminah", "Bpk. Yusuf"],
-            "Status": ["✅ Syariah", "✅ Syariah", "⚠️ Review"]
-        })
-
-else:
-    st.info(f"Halaman {menu} sedang dalam pengembangan.")
-
+</body>
+</html>
