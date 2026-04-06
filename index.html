@@ -5,35 +5,19 @@ from datetime import datetime
 
 # --- KONFIGURASI HALAMAN ---
 st.set_page_config(
-    page_title="Hifza Moslem Wear - Sharia Dashboard",
-    page_icon="🛡️",
+    page_title="Hifza Moeslim Wear - Sharia Dashboard",
+    page_icon="🌙",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# --- STYLING CUSTOM (CSS) ---
+# --- STYLING CUSTOM (Deep Sea Green) ---
 st.markdown("""
     <style>
-    .main {
-        background-color: #f8fafc;
-    }
-    [data-testid="stMetricValue"] {
-        font-size: 28px;
-        font-weight: 700;
-        color: #1e293b;
-    }
-    .stButton>button {
-        width: 100%;
-        border-radius: 10px;
-        font-weight: bold;
-    }
-    .stock-card {
-        background-color: #2563eb;
-        color: white;
-        padding: 30px;
-        border-radius: 20px;
-        text-align: center;
-    }
+    .main { background-color: #ffffff; }
+    div[data-testid="stMetricValue"] { color: #004d40; font-weight: bold; }
+    .stButton>button { background-color: #004d40; color: white; border-radius: 8px; }
+    div[data-testid="stSidebar"] { background-color: #004d40; color: white; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -46,88 +30,61 @@ def get_revenue_data():
 
 # --- SIDEBAR NAVIGASI ---
 with st.sidebar:
-    st.markdown("### 🛡️ **Hifza Moslem Wear**")
+    st.markdown("### 💠 **Hifza Moeslim Wear**")
     st.caption("Sistem Manajemen Syariah")
     st.divider()
-    
-    menu = st.radio(
-        "Menu Utama",
-        ["Dashboard", "Penjualan", "Produk", "Laporan", "Audit", "Pengaturan"],
-        index=0
-    )
-    
+    menu = st.radio("Menu Utama", ["Dashboard", "Penjualan", "Produk", "Laporan", "Audit", "Pengaturan"])
     st.divider()
-    st.write("**Status Audit:** 98.4% Patuh")
+    st.write("**Status Audit:** 🟢 98.4% Patuh")
     if st.button("Jalankan Audit Baru"):
         with st.spinner("Menganalisis transaksi..."):
             st.success("Audit Selesai: Sesuai Syariah!")
 
 # --- HALAMAN DASHBOARD ---
 if menu == "Dashboard":
-    st.title("Dashboard Bisnis Syariah")
+    st.title("🌙 Dashboard Bisnis Syariah")
     st.write(f"Selamat datang kembali, **Admin**. Hari ini: {datetime.now().strftime('%d %B %Y')}")
-    
+
     # 1. Baris Metrik (Stat Cards)
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Total Penjualan", "Rp 34.2M", "+12%")
     m2.metric("Produk Terjual", "1,284", "+5%")
     m3.metric("Laba Bersih", "Rp 8.4M", "+18%")
     m4.metric("Estimasi Zakat", "Rp 2.1M", "2.5%")
-    
+
     st.write("") # Spacer
-    
+
     # 2. Konten Utama (Grafik & Stok)
     col_chart, col_stock = st.columns([2, 1])
-    
+
     with col_chart:
         st.subheader("Pertumbuhan Pendapatan")
         df = get_revenue_data()
         fig = go.Figure()
         fig.add_trace(go.Scatter(
-            x=df["Bulan"], y=df["Revenue"],
-            fill='tozeroy',
-            mode='lines+markers',
-            line=dict(color='#2563eb', width=3),
-            fillcolor='rgba(37, 99, 235, 0.1)'
+            x=df["Bulan"], y=df["Revenue"], 
+            fill='tozeroy', mode='lines+markers',
+            line=dict(color='#004d40', width=3),
+            fillcolor='rgba(0, 77, 64, 0.1)'
         ))
-        fig.update_layout(
-            margin=dict(l=0, r=0, t=20, b=0),
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            xaxis=dict(showgrid=False),
-            yaxis=dict(showgrid=True, gridcolor='#f1f5f9')
-        )
+        fig.update_layout(margin=dict(l=0, r=0, t=20, b=0), height=300)
         st.plotly_chart(fig, use_container_width=True)
-        
+
     with col_stock:
         st.subheader("Kesehatan Stok")
-        st.markdown("""
-        <div class="stock-card">
-            <p style="margin:0; opacity:0.8;">Produk Aman</p>
-            <h1 style="font-size: 64px; margin: 10px 0; color: white;">42</h1>
-            <div style="background: rgba(255,255,255,0.2); height: 8px; border-radius: 4px; margin: 15px 0;">
-                <div style="background: white; width: 85%; height: 100%; border-radius: 4px;"></div>
-            </div>
-            <p style="font-size: 14px; margin:0;">8 produk butuh restock segera</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
+        st.info("**Produk Aman: 42**")
+        st.warning("**Butuh Restock: 8**")
+        st.progress(84)
+
     # 3. Tabel Transaksi Terakhir
     st.subheader("Transaksi Terakhir")
     trx_df = pd.DataFrame([
-        {"ID": "#TRX-001", "Pelanggan": "Ibu Rahma", "Total": "Rp 450.000", "Metode": "Transfer", "Status": "Selesai"},
-        {"ID": "#TRX-002", "Pelanggan": "Siti Aminah", "Total": "Rp 1.200.000", "Metode": "E-Wallet", "Status": "Selesai"},
-        {"ID": "#TRX-003", "Pelanggan": "Bpk. Yusuf", "Total": "Rp 350.000", "Metode": "Cash", "Status": "Selesai"},
+        {"ID": "#TRX-001", "Pelanggan": "Ibu Rahma", "Total": "Rp 450.000", "Metode": "Transfer", "Status": "✅ Sharia Compliant"},
+        {"ID": "#TRX-002", "Pelanggan": "Siti Aminah", "Total": "Rp 1.200.000", "Metode": "E-Wallet", "Status": "✅ Sharia Compliant"},
+        {"ID": "#TRX-003", "Pelanggan": "Bpk. Yusuf", "Total": "Rp 350.000", "Metode": "Cash", "Status": "⚠️ Manual Review Needed"},
     ])
     st.dataframe(trx_df, use_container_width=True, hide_index=True)
 
-# --- FLOATING CHATBOT (SIMULASI) ---
-with st.sidebar.expander("💬 Sharia AI Assistant", expanded=False):
-    st.write("Tanyakan tentang kepatuhan syariah bisnis Anda.")
-    prompt = st.text_input("Ketik pertanyaan...")
-    if prompt:
-        st.write(f"**AI:** Berdasarkan prinsip syariah, transaksi '{prompt}' Anda terlihat aman karena tidak mengandung unsur gharar.")
-
 # --- FOOTER ---
 st.divider()
-st.caption("© 2026 Hifza Moslem Wear - Powered by Sharia-Compliant AI")
+st.caption("© 2026 Hifza Moeslim Wear - Powered by Sharia-Compliant AI")
