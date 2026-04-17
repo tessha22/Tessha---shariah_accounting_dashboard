@@ -12,12 +12,12 @@
 
     <style>
         :root {
-            /* Warna Latar Belakang Cerah & Gradien */
             --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --glass-bg: rgba(255, 255, 255, 0.15);
             --glass-border: rgba(255, 255, 255, 0.3);
             --text-color: #ffffff;
             --accent-sharia: #00f2fe;
+            --accent-pink: #ff007f;
         }
 
         * {
@@ -33,22 +33,15 @@
             min-height: 100vh;
             color: var(--text-color);
             display: flex;
+            overflow-x: hidden;
         }
 
-        /* Dekorasi Lingkaran Latar Belakang (Untuk mempertegas efek blur) */
-        .blob {
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            background: rgba(0, 242, 254, 0.3);
-            filter: blur(80px);
-            border-radius: 50%;
-            z-index: -1;
-        }
+        /* Blobs */
+        .blob { position: fixed; width: 400px; height: 400px; background: rgba(0, 242, 254, 0.3); filter: blur(80px); border-radius: 50%; z-index: -1; }
         .blob-1 { top: -100px; right: -100px; }
         .blob-2 { bottom: -100px; left: -100px; background: rgba(255, 0, 127, 0.2); }
 
-        /* --- SIDEBAR GLASS --- */
+        /* Sidebar */
         .sidebar {
             width: 260px;
             background: var(--glass-bg);
@@ -57,62 +50,34 @@
             border-right: 1px solid var(--glass-border);
             padding: 40px 20px;
             height: 100vh;
-            position: sticky;
-            top: 0;
+            position: fixed;
+            top: 0; left: 0;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 50px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        .logo { font-size: 24px; font-weight: 700; margin-bottom: 50px; display: flex; align-items: center; gap: 10px; }
         .sidebar ul { list-style: none; }
-        .sidebar li { margin-bottom: 15px; }
-
+        .sidebar li { margin-bottom: 10px; }
         .sidebar a {
             color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            border-radius: 15px;
-            transition: 0.3s;
-            border: 1px solid transparent;
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 20px; border-radius: 15px; transition: 0.3s;
+            border: 1px solid transparent; cursor: pointer;
         }
-
         .sidebar a:hover, .sidebar a.active {
             background: rgba(255, 255, 255, 0.2);
             border: 1px solid var(--glass-border);
             color: #fff;
-            transform: translateX(5px);
         }
 
-        /* --- MAIN CONTENT --- */
-        .main {
-            flex: 1;
-            padding: 40px;
-        }
+        /* Main Content */
+        .main { flex: 1; margin-left: 260px; padding: 40px; }
+        .content-section { display: none; animation: fadeIn 0.5s ease; }
+        .content-section.active { display: block; }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- GLASS CARDS --- */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
+        /* Glass Components */
         .glass-card {
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -121,50 +86,31 @@
             border-radius: 24px;
             padding: 25px;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            margin-bottom: 25px;
+        }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
+
+        /* UI Elements */
+        input, select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            padding: 12px; border-radius: 12px; color: white; width: 100%; margin-top: 8px;
+        }
+        button {
+            background: var(--accent-sharia);
+            border: none; padding: 12px 25px; border-radius: 12px;
+            color: #000; font-weight: 700; cursor: pointer; margin-top: 15px;
             transition: 0.3s;
         }
+        button:hover { transform: scale(1.05); filter: brightness(1.1); }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { text-align: left; padding: 12px; border-bottom: 1px solid var(--glass-border); color: var(--accent-sharia); }
+        td { padding: 12px; border-bottom: rgba(255,255,255,0.05) 1px solid; }
 
-        .glass-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .card-label {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .card-value {
-            font-size: 28px;
-            font-weight: 700;
-            margin-top: 10px;
-            display: block;
-        }
-
-        /* --- CHART & LOWER SECTION --- */
-        .chart-container {
-            margin-bottom: 30px;
-        }
-
-        .audit-score {
-            font-size: 60px;
-            font-weight: 800;
-            background: linear-gradient(to right, #fff, var(--accent-sharia));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .status-pill {
-            background: rgba(0, 242, 254, 0.2);
-            border: 1px solid var(--accent-sharia);
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
+        .audit-score { font-size: 60px; font-weight: 800; background: linear-gradient(to right, #fff, var(--accent-sharia)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
 <body>
@@ -178,81 +124,148 @@
             <span>Hifza Sharia</span>
         </div>
         <ul>
-            <li><a href="#" class="active"><i class="ri-layout-masonry-line"></i> Dashboard</a></li>
-            <li><a href="#"><i class="ri-shopping-bag-3-line"></i> Kasir Kas</a></li>
-            <li><a href="#"><i class="ri-database-2-line"></i> Gudang</a></li>
-            <li><a href="#"><i class="ri-hand-coin-line"></i> Zakat & Infaq</a></li>
-            <li><a href="#"><i class="ri-verified-badge-line"></i> Audit Syariah</a></li>
+            <li><a onclick="showSection('dashboard')" id="link-dashboard" class="active"><i class="ri-layout-masonry-line"></i> Dashboard</a></li>
+            <li><a onclick="showSection('kasir')" id="link-kasir"><i class="ri-shopping-bag-3-line"></i> Kasir Kas</a></li>
+            <li><a onclick="showSection('gudang')" id="link-gudang"><i class="ri-database-2-line"></i> Gudang</a></li>
+            <li><a onclick="showSection('zakat')" id="link-zakat"><i class="ri-hand-coin-line"></i> Zakat & Infaq</a></li>
+            <li><a onclick="showSection('audit')" id="link-audit"><i class="ri-verified-badge-line"></i> Audit Syariah</a></li>
         </ul>
     </nav>
 
     <main class="main">
-        <header class="header">
-            <div>
-                <p style="color: rgba(255,255,255,0.6)">Selamat Datang Kembali,</p>
-                <h1 style="font-size: 32px">Dashboard Overview</h1>
+        <section id="dashboard" class="content-section active">
+            <header class="header">
+                <div><p style="color: rgba(255,255,255,0.6)">Selamat Datang Kembali,</p><h1>Overview Utama</h1></div>
+                <div class="glass-card" style="padding: 10px 20px; border-radius: 50px;">Admin Utama</div>
+            </header>
+            
+            <div class="card-grid">
+                <div class="glass-card">
+                    <span style="font-size: 13px; opacity: 0.7;">OMZET HARI INI</span>
+                    <h2 style="font-size: 28px; margin-top:10px;">Rp 1.450.000</h2>
+                    <p style="color: var(--accent-sharia); font-size: 12px; margin-top: 5px;"><i class="ri-arrow-up-line"></i> +15%</p>
+                </div>
+                <div class="glass-card">
+                    <span style="font-size: 13px; opacity: 0.7;">STOK KRITIS</span>
+                    <h2 style="font-size: 28px; margin-top:10px;">3 Produk</h2>
+                    <p style="color: var(--accent-pink); font-size: 12px; margin-top: 5px;">Segera Restock</p>
+                </div>
+                <div class="glass-card">
+                    <span style="font-size: 13px; opacity: 0.7;">SKOR KEPATUHAN</span>
+                    <h2 style="font-size: 28px; margin-top:10px;">99%</h2>
+                    <p style="color: var(--accent-sharia); font-size: 12px; margin-top: 5px;">Syariah Terverifikasi</p>
+                </div>
             </div>
-            <div class="glass-card" style="padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 10px;">
-                <div style="width: 35px; height: 35px; background: var(--accent-sharia); border-radius: 50%"></div>
-                <span style="font-weight: 600">Admin Utama</span>
-            </div>
-        </header>
 
-        <div class="card-grid">
-            <div class="glass-card">
-                <span class="card-label">Omzet Hari Ini</span>
-                <span class="card-value">Rp 1.450.000</span>
-                <p style="font-size: 12px; color: #00f2fe; margin-top: 5px"><i class="ri-arrow-up-line"></i> +15% vs kemarin</p>
+            <div class="glass-card" style="margin-top: 25px;">
+                <h3>Grafik Penjualan Mingguan</h3>
+                <canvas id="shariaChart" height="100"></canvas>
             </div>
-            <div class="glass-card">
-                <span class="card-label">Estimasi Zakat Mal</span>
-                <span class="card-value">Rp 36.250</span>
-                <p style="font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 5px">Profit bersih terekam</p>
-            </div>
-            <div class="glass-card">
-                <span class="card-label">Kepatuhan Syariah</span>
-                <span class="card-value" style="color: var(--accent-sharia)">HALAL</span>
-                <div class="status-pill" style="display: inline-block; margin-top: 10px">Terverifikasi AI</div>
-            </div>
-        </div>
+        </section>
 
-        <div class="glass-card chart-container">
-            <h3 style="margin-bottom: 20px">Grafik Pertumbuhan Penjualan</h3>
-            <canvas id="shariaChart" height="100"></canvas>
-        </div>
-
-        <div class="card-grid" style="grid-template-columns: 1fr 2fr;">
-            <div class="glass-card" style="text-align: center;">
-                <span class="card-label">AI Health Score</span>
-                <div class="audit-score">99%</div>
-                <p style="font-weight: 600">Sangat Aman</p>
-            </div>
-            <div class="glass-card">
-                <h3 style="margin-bottom: 15px">Jurnal Syariah Terkini</h3>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <div style="display: flex; align-items: center; gap: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">
-                        <i class="ri-checkbox-circle-fill" style="color: var(--accent-sharia); font-size: 20px;"></i>
-                        <div>
-                            <p style="font-weight: 600; font-size: 14px;">Akad Murabahah Valid</p>
-                            <p style="font-size: 12px; color: rgba(255,255,255,0.6);">Transaksi #TRX-992 tervalidasi tanpa Riba.</p>
-                        </div>
+        <section id="kasir" class="content-section">
+            <h1>Kasir Kas Syariah</h1>
+            <div class="card-grid" style="grid-template-columns: 2fr 1fr; margin-top: 20px;">
+                <div class="glass-card">
+                    <h3>Input Transaksi</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                        <div><label>Nama Produk</label><input type="text" placeholder="Cari produk..."></div>
+                        <div><label>Harga (Rp)</label><input type="number" id="harga" value="0"></div>
+                        <div><label>Jumlah</label><input type="number" id="qty" value="1"></div>
+                        <div><label>Total</label><h2 id="totalBayar" style="margin-top: 10px; color: var(--accent-sharia);">Rp 0</h2></div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <i class="ri-error-warning-fill" style="color: #ff007f; font-size: 20px;"></i>
-                        <div>
-                            <p style="font-weight: 600; font-size: 14px;">Pengingat Nisab</p>
-                            <p style="font-size: 12px; color: rgba(255,255,255,0.6);">Saldo tabungan mendekati batas wajib zakat.</p>
-                        </div>
+                    <button onclick="prosesTransaksi()">Proses Akad Jual Beli</button>
+                </div>
+                <div class="glass-card">
+                    <h3>Ringkasan Akad</h3>
+                    <p style="font-size: 13px; margin-top: 15px; opacity: 0.8;">Setiap transaksi di Hifza menggunakan akad Murabahah yang transparan.</p>
+                    <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-top: 15px;">
+                        <small>Margin Keuntungan:</small>
+                        <p style="font-weight: 700;">10% (Flat)</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section id="gudang" class="content-section">
+            <h1>Inventaris Gudang</h1>
+            <div class="glass-card" style="margin-top: 20px;">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Nama Barang</th><th>Stok</th><th>Status</th><th>Aksi</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>#P01</td><td>Gamis Al-Fatih</td><td>45</td><td><span style="color: var(--accent-sharia)">Tersedia</span></td><td><i class="ri-edit-line"></i></td></tr>
+                        <tr><td>#P02</td><td>Koko Modern Az-Zikra</td><td>2</td><td><span style="color: var(--accent-pink)">Hampir Habis</span></td><td><i class="ri-edit-line"></i></td></tr>
+                        <tr><td>#P03</td><td>Mukenah Silk</td><td>12</td><td><span style="color: var(--accent-sharia)">Tersedia</span></td><td><i class="ri-edit-line"></i></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="zakat" class="content-section">
+            <h1>Kalkulator Zakat Maal</h1>
+            <div class="glass-card" style="max-width: 500px; margin-top: 20px;">
+                <label>Total Saldo Tabungan (1 Tahun)</label>
+                <input type="number" id="saldoZakat" placeholder="Rp 0" oninput="hitungZakat()">
+                <div style="margin-top: 20px; padding: 20px; background: rgba(0,242,254,0.1); border-radius: 15px; border: 1px solid var(--accent-sharia);">
+                    <p>Estimasi Zakat (2.5%):</p>
+                    <h1 id="hasilZakat" style="color: var(--accent-sharia);">Rp 0</h1>
+                </div>
+                <p style="font-size: 12px; margin-top: 10px; opacity: 0.6;">*Nisab 2026: Rp 85.000.000 (Emas 85gr)</p>
+            </div>
+        </section>
+
+        <section id="audit" class="content-section">
+            <h1>AI Sharia Compliance Audit</h1>
+            <div class="glass-card" style="text-align: center; padding: 50px;">
+                <div class="audit-score">99.8%</div>
+                <h3 style="margin-top: 10px;">SANGAT PATUH</h3>
+                <p style="opacity: 0.7; margin-top: 15px;">Seluruh transaksi bulan April tervalidasi bebas dari unsur Riba, Gharar, dan Maysir.</p>
+                <button style="background: white;">Unduh Sertifikat Kepatuhan</button>
+            </div>
+        </section>
     </main>
 
     <script>
+        // Fungsi Navigasi SPA
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.sidebar a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+            document.getElementById('link-' + sectionId).classList.add('active');
+        }
+
+        // Logika Kasir Sederhana
+        const inHarga = document.getElementById('harga');
+        const inQty = document.getElementById('qty');
+        const outTotal = document.getElementById('totalBayar');
+
+        function updateTotal() {
+            let total = inHarga.value * inQty.value;
+            outTotal.innerText = 'Rp ' + total.toLocaleString();
+        }
+        inHarga.addEventListener('input', updateTotal);
+        inQty.addEventListener('input', updateTotal);
+
+        function prosesTransaksi() {
+            alert("Akad Murabahah Disetujui! Transaksi berhasil dicatat ke jurnal syariah.");
+        }
+
+        // Logika Zakat
+        function hitungZakat() {
+            let saldo = document.getElementById('saldoZakat').value;
+            let zakat = saldo * 0.025;
+            document.getElementById('hasilZakat').innerText = 'Rp ' + (zakat > 0 ? zakat.toLocaleString() : 0);
+        }
+
+        // Chart.js Setup
         const ctx = document.getElementById('shariaChart').getContext('2d');
-        
-        // Gradien untuk area chart
         const chartFill = ctx.createLinearGradient(0, 0, 0, 400);
         chartFill.addColorStop(0, 'rgba(0, 242, 254, 0.4)');
         chartFill.addColorStop(1, 'rgba(0, 242, 254, 0)');
@@ -262,11 +275,10 @@
             data: {
                 labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
                 datasets: [{
-                    label: 'Penjualan (Rp)',
-                    data: [12, 19, 15, 25, 22, 30, 45],
+                    label: 'Penjualan',
+                    data: [1200, 1900, 1500, 2500, 2200, 3000, 4500],
                     borderColor: '#00f2fe',
                     borderWidth: 3,
-                    pointBackgroundColor: '#fff',
                     fill: true,
                     backgroundColor: chartFill,
                     tension: 0.4
@@ -274,19 +286,10 @@
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: { display: false }
-                },
+                plugins: { legend: { display: false } },
                 scales: {
-                    y: { 
-                        beginAtZero: true, 
-                        grid: { color: 'rgba(255,255,255,0.1)' },
-                        ticks: { color: 'rgba(255,255,255,0.7)' }
-                    },
-                    x: { 
-                        grid: { display: false },
-                        ticks: { color: 'rgba(255,255,255,0.7)' }
-                    }
+                    y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#fff' } },
+                    x: { grid: { display: false }, ticks: { color: '#fff' } }
                 }
             }
         });
