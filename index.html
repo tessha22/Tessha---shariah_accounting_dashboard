@@ -37,45 +37,46 @@
         .blob-2 { bottom: -150px; left: -100px; background: rgba(30, 58, 138, 0.4); }
 
         /* --- TAMPILAN LOGIN --- */
-        #login-page {
+        #login-container {
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             padding: 20px;
-            text-align: center;
             display: flex;
             flex-direction: column;
             gap: 20px;
+            z-index: 10;
         }
 
-        .login-header-box {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(5px);
+        .tagline-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
             padding: 15px;
             border-radius: 15px;
             border: 1px solid var(--glass-border);
+            text-align: center;
         }
 
-        .login-header-box h2 {
-            font-size: 16px;
-            font-weight: 400;
+        .tagline-box p {
+            font-size: 14px;
             letter-spacing: 1px;
             color: var(--accent-cyan);
+            font-weight: 600;
         }
 
         .login-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             padding: 40px;
             border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
         }
 
-        .login-card h1 { font-size: 28px; margin-bottom: 30px; }
+        .login-card h1 { font-size: 26px; margin-bottom: 30px; letter-spacing: -1px; }
         
         .input-group { text-align: left; margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 14px; margin-bottom: 8px; color: rgba(255,255,255,0.8); }
+        .input-group label { display: block; font-size: 13px; margin-bottom: 8px; opacity: 0.8; }
         
         input {
             width: 100%;
@@ -85,10 +86,10 @@
             border-radius: 12px;
             color: white;
             outline: none;
-            transition: 0.3s;
+            font-size: 15px;
         }
 
-        input:focus { border-color: var(--accent-cyan); background: rgba(255,255,255,0.15); }
+        input:focus { border-color: var(--accent-cyan); }
 
         .btn-login {
             width: 100%;
@@ -101,23 +102,63 @@
             font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
-            margin-top: 10px;
         }
 
-        .btn-login:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(34, 211, 238, 0.3); }
+        .btn-login:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-        /* --- DASHBOARD (Hidden by Default) --- */
-        #main-dashboard { display: none; width: 100%; min-height: 100vh; }
-        
-        /* Reuse CSS Dashboard sebelumnya */
-        .sidebar { width: 260px; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); padding: 40px 20px; height: 100vh; position: fixed; top: 0; left: 0; }
-        .main { flex: 1; margin-left: 260px; padding: 40px; width: calc(100% - 260px); }
-        .glass-card { background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
-        .sidebar a { color: rgba(255, 255, 255, 0.7); text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 12px; cursor: pointer; }
-        .sidebar a.active { background: rgba(255, 255, 255, 0.15); color: var(--accent-cyan); border: 1px solid var(--glass-border); }
+        /* --- DASHBOARD SECTION --- */
+        #main-dashboard { 
+            display: none; /* Tersembunyi di awal */
+            width: 100%; 
+            min-height: 100vh;
+        }
+
+        .sidebar { 
+            width: 260px; 
+            background: rgba(15, 23, 42, 0.6); 
+            backdrop-filter: blur(20px); 
+            border-right: 1px solid var(--glass-border); 
+            padding: 40px 20px; 
+            height: 100vh; 
+            position: fixed;
+            left: 0; top: 0;
+        }
+
+        .main-content { 
+            flex: 1; 
+            margin-left: 260px; 
+            padding: 40px; 
+            width: calc(100% - 260px);
+        }
+
+        .glass-card { 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 20px; 
+            padding: 25px; 
+            margin-bottom: 25px; 
+        }
+
+        .sidebar a { 
+            color: rgba(255, 255, 255, 0.7); 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            padding: 14px 18px; 
+            border-radius: 12px; 
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .sidebar a.active { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: var(--accent-cyan); 
+            border: 1px solid var(--glass-border); 
+        }
+
         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        .content-section { display: none; }
-        .content-section.active { display: block; }
     </style>
 </head>
 <body>
@@ -125,123 +166,118 @@
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
 
-    <div id="login-page">
-        <div class="login-header-box">
-            <h2>"Memonitoring Penjualan Dengan Baik"</h2>
+    <div id="login-container">
+        <div class="tagline-box">
+            <p>"Memonitoring Penjualan Dengan Baik"</p>
         </div>
 
         <div class="login-card">
-            <div style="margin-bottom: 20px; color: var(--accent-cyan); font-size: 40px;">
-                <i class="ri-blaze-fill"></i>
-            </div>
+            <i class="ri-blaze-fill" style="font-size: 40px; color: var(--accent-cyan);"></i>
             <h1>Hifza Sharia</h1>
             
             <div class="input-group">
                 <label>ID / Email</label>
-                <input type="text" id="user-id" placeholder="Masukkan ID anda...">
+                <input type="text" id="userid" placeholder="Username">
             </div>
 
             <div class="input-group">
                 <label>Password</label>
-                <input type="password" id="user-pass" placeholder="••••••••">
+                <input type="password" id="userpass" placeholder="Password">
             </div>
 
-            <button class="btn-login" onclick="handleLogin()">Masuk ke Dashboard</button>
-            <p style="font-size: 12px; margin-top: 20px; opacity: 0.6;">Sistem Keamanan Terverifikasi AI</p>
+            <button class="btn-login" onclick="handleLogin()">Masuk Sekarang</button>
+            <p style="margin-top: 20px; font-size: 11px; opacity: 0.5;">ID: admin | Pass: 1234</p>
         </div>
     </div>
 
     <div id="main-dashboard">
         <nav class="sidebar">
-            <div style="font-size: 22px; font-weight: 700; margin-bottom: 50px; display: flex; align-items: center; gap: 12px; color: var(--accent-cyan);">
-                <i class="ri-blaze-fill"></i><span>Hifza Sharia</span>
+            <div style="font-size: 20px; font-weight: 700; margin-bottom: 40px; color: var(--accent-cyan); display: flex; align-items: center; gap: 10px;">
+                <i class="ri-blaze-fill"></i> Hifza Sharia
             </div>
             <ul>
-                <li><a onclick="showSection('dashboard')" id="link-dashboard" class="active"><i class="ri-dashboard-3-line"></i> Dashboard</a></li>
-                <li><a onclick="showSection('kasir')" id="link-kasir"><i class="ri-bank-card-line"></i> Kasir Kas</a></li>
-                <li><a onclick="showSection('gudang')" id="link-gudang"><i class="ri-box-3-line"></i> Gudang</a></li>
-                <li><a onclick="showSection('zakat')" id="link-zakat"><i class="ri-hand-heart-line"></i> Zakat & Infaq</a></li>
-                <li><a onclick="logout()"><i class="ri-logout-box-line"></i> Keluar</a></li>
+                <li><a class="active"><i class="ri-dashboard-line"></i> Dashboard</a></li>
+                <li><a><i class="ri-shopping-cart-line"></i> Penjualan</a></li>
+                <li><a><i class="ri-database-line"></i> Gudang</a></li>
+                <li><a onclick="location.reload()"><i class="ri-logout-box-line"></i> Keluar</a></li>
             </ul>
         </nav>
 
-        <main class="main">
-            <section id="dashboard" class="content-section active">
-                <div style="margin-bottom: 30px;">
-                    <p style="opacity: 0.6;">Assalamualaikum, Admin</p>
-                    <h1>Ringkasan Operasional</h1>
-                </div>
-                <div class="card-grid">
-                    <div class="glass-card">
-                        <small>OMZET HARI INI</small>
-                        <h2>Rp 1.450.000</h2>
-                    </div>
-                    <div class="glass-card">
-                        <small>KEPATUHAN AI</small>
-                        <h2 style="color: var(--accent-cyan);">99.8%</h2>
-                    </div>
-                </div>
-                <div class="glass-card" style="margin-top: 20px;">
-                    <canvas id="blueChart" height="100"></canvas>
-                </div>
-            </section>
+        <main class="main-content">
+            <header style="margin-bottom: 30px;">
+                <p style="opacity: 0.7;">Assalamualaikum, Admin</p>
+                <h1>Ringkasan Penjualan</h1>
+            </header>
 
-            <section id="kasir" class="content-section">
-                <h1>Kasir Elektronik</h1>
-                <div class="glass-card" style="margin-top: 20px;">
-                    <p>Fitur Kasir Aktif...</p>
+            <div class="card-grid">
+                <div class="glass-card">
+                    <small style="opacity: 0.7;">OMZET HARI INI</small>
+                    <h2 style="margin-top: 10px;">Rp 1.450.000</h2>
                 </div>
-            </section>
+                <div class="glass-card">
+                    <small style="opacity: 0.7;">KEPATUHAN SYARIAH</small>
+                    <h2 style="margin-top: 10px; color: var(--accent-cyan);">99.8%</h2>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3>Grafik Mingguan</h3>
+                <div style="height: 300px; width: 100%;">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
         </main>
     </div>
 
     <script>
-        // FUNGSI LOGIN SEDERHANA
         function handleLogin() {
-            const id = document.getElementById('user-id').value;
-            const pass = document.getElementById('user-pass').value;
+            // Mengambil input
+            const idInput = document.getElementById('userid').value;
+            const passInput = document.getElementById('userpass').value;
 
-            // Kita buat ID: admin dan Pass: 1234
-            if(id === "admin" && pass === "1234") {
-                // Sembunyikan Login, Tampilkan Dashboard
-                document.getElementById('login-page').style.display = 'none';
-                document.getElementById('main-dashboard').style.display = 'flex';
-                document.body.style.alignItems = 'stretch'; // Reset body alignment
-                initChart(); // Jalankan chart setelah dashboard muncul
+            // Validasi Sederhana
+            if (idInput === "admin" && passInput === "1234") {
+                // 1. Sembunyikan halaman login
+                document.getElementById('login-container').style.display = 'none';
+                
+                // 2. Tampilkan dashboard
+                const dashboard = document.getElementById('main-dashboard');
+                dashboard.style.display = 'flex';
+                
+                // 3. Ubah styling body agar dashboard rapi
+                document.body.style.display = 'block'; 
+                
+                // 4. Jalankan Grafik setelah elemen kanvas muncul di layar
+                renderChart();
             } else {
-                alert("ID atau Password salah! (Gunakan ID: admin, Pass: 1234)");
+                alert("ID atau Password salah! Gunakan ID: admin dan Password: 1234");
             }
         }
 
-        function logout() {
-            location.reload(); // Sederhananya kita reload untuk kembali ke login
-        }
+        function renderChart() {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            
+            // Hapus chart lama jika ada agar tidak tumpang tindih
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
 
-        // FUNGSI NAVIGASI DASHBOARD
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            document.getElementById('link-' + sectionId).classList.add('active');
-        }
-
-        // CHART INITIALIZATION
-        function initChart() {
-            const ctx = document.getElementById('blueChart').getContext('2d');
-            new Chart(ctx, {
+            window.myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
+                    labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
                     datasets: [{
-                        label: 'Omzet',
-                        data: [3200, 4100, 3800, 5200],
+                        label: 'Penjualan',
+                        data: [1200, 1900, 1500, 2500, 2200, 3000, 4500],
                         borderColor: '#22d3ee',
-                        tension: 0.4,
+                        backgroundColor: 'rgba(34, 211, 238, 0.1)',
                         fill: true,
-                        backgroundColor: 'rgba(34, 211, 238, 0.1)'
+                        tension: 0.4
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
                         y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
