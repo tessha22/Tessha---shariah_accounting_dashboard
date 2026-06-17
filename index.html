@@ -1,255 +1,173 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hifza Sharia - Secure Login</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            --glass-bg: rgba(255, 255, 255, 0.12);
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --text-color: #ffffff;
-            --accent-cyan: #22d3ee;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Open Sans', sans-serif; }
-
-        body {
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            min-height: 100vh;
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-        }
-
-        /* Blobs Dekorasi */
-        .blob { position: fixed; width: 500px; height: 500px; background: rgba(34, 211, 238, 0.2); filter: blur(100px); border-radius: 50%; z-index: -1; }
-        .blob-1 { top: -150px; right: -100px; }
-        .blob-2 { bottom: -150px; left: -100px; background: rgba(30, 58, 138, 0.4); }
-
-        /* --- TAMPILAN LOGIN --- */
-        #login-page {
-            width: 100%;
-            max-width: 450px;
-            padding: 20px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .login-header-box {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(5px);
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .login-header-box h2 {
-            font-size: 16px;
-            font-weight: 400;
-            letter-spacing: 1px;
-            color: var(--accent-cyan);
-        }
-
-        .login-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-        }
-
-        .login-card h1 { font-size: 28px; margin-bottom: 30px; }
-        
-        .input-group { text-align: left; margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 14px; margin-bottom: 8px; color: rgba(255,255,255,0.8); }
-        
-        input {
-            width: 100%;
-            padding: 14px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: white;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus { border-color: var(--accent-cyan); background: rgba(255,255,255,0.15); }
-
-        .btn-login {
-            width: 100%;
-            padding: 14px;
-            background: var(--accent-cyan);
-            border: none;
-            border-radius: 12px;
-            color: #0f172a;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-login:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(34, 211, 238, 0.3); }
-
-        /* --- DASHBOARD (Hidden by Default) --- */
-        #main-dashboard { display: none; width: 100%; min-height: 100vh; }
-        
-        /* Reuse CSS Dashboard sebelumnya */
-        .sidebar { width: 260px; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); padding: 40px 20px; height: 100vh; position: fixed; top: 0; left: 0; }
-        .main { flex: 1; margin-left: 260px; padding: 40px; width: calc(100% - 260px); }
-        .glass-card { background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
-        .sidebar a { color: rgba(255, 255, 255, 0.7); text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 12px; cursor: pointer; }
-        .sidebar a.active { background: rgba(255, 255, 255, 0.15); color: var(--accent-cyan); border: 1px solid var(--glass-border); }
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        .content-section { display: none; }
-        .content-section.active { display: block; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HIFZA — Dashboard Sistem Informasi Akuntansi Syariah</title>
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" integrity="sha384-Zrp+/OxtbELW1lLVe4upUWjDzdj8a+rkiop8eouuZZgwi/U8IVF80DITaLpYN8yw" crossorigin="anonymous">
+  <!-- FontAwesome Icons for modern aesthetic -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom Style -->
+  <link rel="stylesheet" href="css/global.css">
+  <!-- Chart.js CDN for clean graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body class="bg-light">
 
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
+  <!-- APP CONTAINER -->
+  <div id="app-container" class="app-layout hidden">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-area">
+          <img src="assets/logo-hifza.jpg" class="logo-icon" alt="Logo HIFZA">
+          <span class="logo-text">HIFZA</span>
+        </div>
+        <p class="logo-sub">Akuntansi Syariah</p>
+      </div>
 
-    <div id="login-page">
-        <div class="login-header-box">
-            <h2>"Memonitoring Penjualan Dengan Baik"</h2>
+      <!-- NAVIGATION MENU -->
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#overview" class="nav-link active" data-page="overview">
+              <i class="fa-solid fa-chart-pie"></i> <span>Overview</span>
+            </a>
+          </li>
+          <li>
+            <a href="#kasir" class="nav-link" data-page="kasir">
+              <i class="fa-solid fa-cash-register"></i> <span>Kasir Penjualan</span>
+            </a>
+          </li>
+          <li>
+            <a href="#inventaris" class="nav-link" data-page="inventaris">
+              <i class="fa-solid fa-boxes-stacked"></i> <span>Gudang Stok</span>
+            </a>
+          </li>
+          <li>
+            <a href="#laporan" class="nav-link" data-page="laporan">
+              <i class="fa-solid fa-file-invoice-dollar"></i> <span>Laporan Keuangan</span>
+            </a>
+          </li>
+          <li>
+            <a href="#zakat" class="nav-link" data-page="zakat">
+              <i class="fa-solid fa-hand-holding-heart"></i> <span>Zakat & Infaq</span>
+            </a>
+          </li>
+          <li>
+            <a href="#audit" class="nav-link" data-page="audit">
+              <i class="fa-solid fa-shield-halved"></i> <span>Audit Trail</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- USER PROFILE MINI -->
+      <div class="user-profile-widget">
+        <div class="avatar">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <div class="user-info">
+          <h4 id="user-display-name">Nama Pengguna</h4>
+          <span id="user-display-role" class="badge badge-role">Peran</span>
+        </div>
+      </div>
+
+      <!-- MODE SELECTOR STATUS -->
+      <div class="sidebar-footer">
+        <div class="connection-status">
+          <span class="status-indicator online" id="connection-indicator"></span>
+          <span class="status-text" id="connection-text">Server Mode</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="main-content">
+      <!-- TOP HEADER -->
+      <header class="content-header">
+        <div class="header-title-section">
+          <h1 id="page-title">Ringkasan Utama</h1>
+          <p id="page-subtitle" class="text-muted">Selamat datang kembali di HIFZA</p>
+        </div>
+        <div class="header-actions">
+          <div class="system-time">
+            <i class="fa-regular fa-clock"></i>
+            <span id="time-display">2026-05-21 16:30</span>
+          </div>
+          <button id="btn-logout" class="btn btn-logout-danger">
+            <i class="fa-solid fa-right-from-bracket"></i> Keluar
+          </button>
+        </div>
+      </header>
+
+      <!-- DYNAMIC CONTENT AREA -->
+      <div id="dynamic-content" class="content-body fade-in">
+        <!-- Content will be injected here via app.js -->
+      </div>
+    </main>
+  </div>
+
+  <!-- LOGIN CONTAINER -->
+  <div id="login-container" class="login-layout">
+    <div class="login-card">
+      <div class="login-header">
+        <img src="assets/logo-hifza.jpg" class="login-logo" alt="Logo HIFZA">
+        <h2>Pakaian Muslim</h2>
+        <p>Syar'i &bull; Elegan &bull; Nyaman</p>
+      </div>
+
+      <div class="alert alert-danger hidden" id="login-error-alert">
+        <i class="fa-solid fa-circle-exclamation"></i> <span id="login-error-text">Kredensial salah</span>
+      </div>
+
+      <form id="form-login">
+        <div class="form-group">
+          <label for="login-username"><i class="fa-regular fa-envelope"></i> Username / Email</label>
+          <input type="email" id="login-username" placeholder="contoh: owner@hifza.id" required>
         </div>
 
-        <div class="login-card">
-            <div style="margin-bottom: 20px; color: var(--accent-cyan); font-size: 40px;">
-                <i class="ri-blaze-fill"></i>
-            </div>
-            <h1>Hifza Sharia</h1>
-            
-            <div class="input-group">
-                <label>ID / Email</label>
-                <input type="text" id="user-id" placeholder="Masukkan ID anda...">
-            </div>
-
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="user-pass" placeholder="••••••••">
-            </div>
-
-            <button class="btn-login" onclick="handleLogin()">Masuk ke Dashboard</button>
-            <p style="font-size: 12px; margin-top: 20px; opacity: 0.6;">Sistem Keamanan Terverifikasi AI</p>
+        <div class="form-group">
+          <label for="login-password"><i class="fa-solid fa-lock"></i> Kata Sandi</label>
+          <input type="password" id="login-password" placeholder="••••••••" required>
         </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          Masuk Ke Dashboard <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </form>
     </div>
+  </div>
 
-    <div id="main-dashboard">
-        <nav class="sidebar">
-            <div style="font-size: 22px; font-weight: 700; margin-bottom: 50px; display: flex; align-items: center; gap: 12px; color: var(--accent-cyan);">
-                <i class="ri-blaze-fill"></i><span>Hifza Sharia</span>
-            </div>
-            <ul>
-                <li><a onclick="showSection('dashboard')" id="link-dashboard" class="active"><i class="ri-dashboard-3-line"></i> Dashboard</a></li>
-                <li><a onclick="showSection('kasir')" id="link-kasir"><i class="ri-bank-card-line"></i> Kasir Kas</a></li>
-                <li><a onclick="showSection('gudang')" id="link-gudang"><i class="ri-box-3-line"></i> Gudang</a></li>
-                <li><a onclick="showSection('zakat')" id="link-zakat"><i class="ri-hand-heart-line"></i> Zakat & Infaq</a></li>
-                <li><a onclick="logout()"><i class="ri-logout-box-line"></i> Keluar</a></li>
-            </ul>
-        </nav>
-
-        <main class="main">
-            <section id="dashboard" class="content-section active">
-                <div style="margin-bottom: 30px;">
-                    <p style="opacity: 0.6;">Assalamualaikum, Admin</p>
-                    <h1>Ringkasan Operasional</h1>
-                </div>
-                <div class="card-grid">
-                    <div class="glass-card">
-                        <small>OMZET HARI INI</small>
-                        <h2>Rp 1.450.000</h2>
-                    </div>
-                    <div class="glass-card">
-                        <small>KEPATUHAN AI</small>
-                        <h2 style="color: var(--accent-cyan);">99.8%</h2>
-                    </div>
-                </div>
-                <div class="glass-card" style="margin-top: 20px;">
-                    <canvas id="blueChart" height="100"></canvas>
-                </div>
-            </section>
-
-            <section id="kasir" class="content-section">
-                <h1>Kasir Elektronik</h1>
-                <div class="glass-card" style="margin-top: 20px;">
-                    <p>Fitur Kasir Aktif...</p>
-                </div>
-            </section>
-        </main>
+  <!-- WHATSAPP NOTIFICATION POPUP SIMULATOR -->
+  <div id="whatsapp-simulator" class="wa-popup hidden">
+    <div class="wa-header">
+      <div class="wa-avatar">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <div class="wa-sender-info">
+        <h4>Hifza Audit Assistant</h4>
+        <span>WhatsApp Notifikasi (Owner)</span>
+      </div>
+      <button class="wa-close" onclick="document.getElementById('whatsapp-simulator').classList.add('hidden')">&times;</button>
     </div>
+    <div class="wa-body">
+      <p class="wa-message-text" id="wa-alert-text">
+        ⚠️ <strong>Pemberitahuan Transaksi Tinggi:</strong> Transaksi manual sebesar Rp12.500.000 terdeteksi. Silakan verifikasi di menu Audit.
+      </p>
+      <span class="wa-time" id="wa-alert-time">16:30</span>
+    </div>
+  </div>
 
-    <script>
-        // FUNGSI LOGIN SEDERHANA
-        function handleLogin() {
-            const id = document.getElementById('user-id').value;
-            const pass = document.getElementById('user-pass').value;
-
-            // Kita buat ID: admin dan Pass: 1234
-            if(id === "admin" && pass === "1234") {
-                // Sembunyikan Login, Tampilkan Dashboard
-                document.getElementById('login-page').style.display = 'none';
-                document.getElementById('main-dashboard').style.display = 'flex';
-                document.body.style.alignItems = 'stretch'; // Reset body alignment
-                initChart(); // Jalankan chart setelah dashboard muncul
-            } else {
-                alert("ID atau Password salah! (Gunakan ID: admin, Pass: 1234)");
-            }
-        }
-
-        function logout() {
-            location.reload(); // Sederhananya kita reload untuk kembali ke login
-        }
-
-        // FUNGSI NAVIGASI DASHBOARD
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            document.getElementById('link-' + sectionId).classList.add('active');
-        }
-
-        // CHART INITIALIZATION
-        function initChart() {
-            const ctx = document.getElementById('blueChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
-                    datasets: [{
-                        label: 'Omzet',
-                        data: [3200, 4100, 3800, 5200],
-                        borderColor: '#22d3ee',
-                        tension: 0.4,
-                        fill: true,
-                        backgroundColor: 'rgba(34, 211, 238, 0.1)'
-                    }]
-                },
-                options: {
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                        x: { ticks: { color: '#fff' }, grid: { display: false } }
-                    }
-                }
-            });
-        }
-    </script>
+  <!-- Global scripts -->
+  <!-- Supabase client CDN SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- bcryptjs client CDN SDK for client-side password verification -->
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
