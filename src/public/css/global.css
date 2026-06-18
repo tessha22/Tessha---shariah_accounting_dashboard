@@ -804,6 +804,25 @@ input:focus, select:focus {
   transform: translateY(0);
 }
 
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.register-link a {
+  color: #38bdf8;
+  font-weight: 600;
+  margin-left: 4px;
+  transition: all var(--transition-fast);
+}
+
+.register-link a:hover {
+  color: #0ea5e9;
+  text-decoration: underline;
+}
+
 .login-footer {
   margin-top: 30px;
   border-top: 1px dashed rgba(255, 255, 255, 0.2);
