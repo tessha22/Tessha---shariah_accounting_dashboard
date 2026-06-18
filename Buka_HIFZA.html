@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Membuka HIFZA Dashboard...</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      text-align: center;
+    }
+    .loader-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+    }
+    h2 {
+      margin-top: 0;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    a {
+      color: #00f2fe;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border-left-color: #00f2fe;
+      animation: spin 1s linear infinite;
+      margin: 20px auto 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+  <script>
+    // Deteksi apakah server lokal aktif
+    fetch('http://127.0.0.1:3000/api/dashboard/kpi', { mode: 'no-cors' })
+      .then(() => {
+        // Jika server aktif, arahkan ke localhost
+        window.location.href = "http://127.0.0.1:3000/";
+      })
+      .catch(() => {
+        // Jika server tidak aktif, arahkan ke file HTML lokal (Offline Mode)
+        window.location.href = "src/public/index.html";
+      });
+  </script>
+</head>
+<body>
+  <div class="loader-container">
+    <h2>HIFZA</h2>
+    <p>Mendeteksi koneksi server dan membuka dashboard akuntansi syariah...</p>
+    <div class="spinner"></div>
+    <p style="margin-top: 25px; font-size: 12px; color: rgba(255,255,255,0.6);">
+      Jika tidak terbuka secara otomatis, silakan klik <a href="http://127.0.0.1:3000/">tautan server</a> atau <a href="src/public/index.html">tautan offline</a>.
+    </p>
+  </div>
+</body>
+</html>

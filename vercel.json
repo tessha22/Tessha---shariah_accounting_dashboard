@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/env.local/(.*)", "destination": "/env.local/$1" },
+    { "source": "/(.*)", "destination": "/src/public/$1" }
+  ]
+}
