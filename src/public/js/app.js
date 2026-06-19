@@ -77,6 +77,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     showLogin();
   });
 
+  // --- REGISTER LINK HANDLING ---
+  const linkRegister = document.getElementById('link-register');
+  if (linkRegister) {
+    linkRegister.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('Fitur pendaftaran akun baru sedang dalam pengembangan.');
+    });
+  }
+
   function showLogin() {
     appContainer.classList.add('hidden');
     loginContainer.classList.remove('hidden');
@@ -717,6 +726,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           return;
         }
 
+        if (!confirm('Apakah Anda yakin ingin memproses pembayaran ini?')) {
+          return;
+        }
+
         const successAlert = document.getElementById('kasir-success-alert');
         const errorAlert = document.getElementById('kasir-error-alert');
         const paymentMethod = selectedPaymentMethod;
@@ -756,6 +769,8 @@ document.addEventListener('DOMContentLoaded', async () => {
               anomalyTriggered = true;
             }
           }
+
+          alert("Pembayaran berhasil diproses dan transaksi telah dicatat!");
 
           successAlert.innerHTML = `<i class="fa-solid fa-circle-check"></i> Pembayaran Berhasil! Berhasil mencatat ${successCount} transaksi. Total: Rp${totalTrxAmount.toLocaleString('id-ID')}.`;
           successAlert.classList.remove('hidden');
