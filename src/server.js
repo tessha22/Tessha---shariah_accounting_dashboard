@@ -116,6 +116,43 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
+// 1b. POST /api/auth/register
+app.post('/api/auth/register', async (req, res) => {
+  const { username, password, role, name } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username dan password wajib diisi.' });
+  }
+  const userRole = role || 'Admin';
+  
+  try {
+    let existingUser;
+    if (!dbHelper.isMockDb) {
+      existingUser = await dbHelper.get('SELECT * FROM users WHERE username = ?', [username]);
+    } else {
+      existingUser = mockDbData.users.find(u => u.username === username);
+    }
+    
+    if (existingUser) {
+      return res.status(400).json({ message: 'Username / Email sudah terdaftar.' });
+    }
+    
+    // Hash password with bcrypt
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const userId = 'usr-' + Math.random().toString(36).substr(2, 9);
+    
+    if (!dbHelper.isMockDb) {
+      await dbHelper.run('INSERT INTO users (id, username, password, role) VALUES (?, ?, ?, ?)', [userId, username, hashedPassword, userRole]);
+    } else {
+      mockDbData.users.push({ id: userId, username, password: hashedPassword, role: userRole });
+    }
+    
+    await logAudit(userId, 'USER_REGISTER', `Pengguna baru ${name ? name + ' (' + username + ')' : username} terdaftar sebagai ${userRole} via Server.`);
+    res.json({ user: { id: userId, username, role: userRole } });
+  } catch (err) {
+    res.status(500).json({ message: 'Terjadi kesalahan server.', error: err.message });
+  }
+});
+
 // 2. GET /api/dashboard/kpi
 app.get('/api/dashboard/kpi', authenticateToken, async (req, res) => {
   try {

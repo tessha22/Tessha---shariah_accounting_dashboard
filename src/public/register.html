@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HIFZA — Pendaftaran Akun Baru</title>
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" integrity="sha384-Zrp+/OxtbELW1lLVe4upUWjDzdj8a+rkiop8eouuZZgwi/U8IVF80DITaLpYN8yw" crossorigin="anonymous">
+  <!-- FontAwesome Icons for modern aesthetic -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom Style -->
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    /* Custom select style for register page glassmorphism */
+    .login-card select {
+      background: #e9f0fc;
+      border: none;
+      color: #1e293b;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 500;
+      width: 100%;
+      transition: all var(--transition-fast);
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      cursor: pointer;
+    }
+    
+    .login-card select:focus {
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.4);
+      outline: none;
+    }
+
+    .select-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .select-wrapper::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #64748b;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-light">
+
+  <!-- REGISTER CONTAINER -->
+  <div class="login-layout">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-logo-container">
+          <img src="assets/logo-hifza.jpg" class="login-logo" alt="Logo HIFZA">
+        </div>
+        <h2>Daftar Akun Baru</h2>
+        <p>HIFZA • Akuntansi Syariah</p>
+      </div>
+
+      <div class="alert alert-danger hidden" id="register-error-alert">
+        <i class="fa-solid fa-circle-exclamation"></i> <span id="register-error-text">Terjadi kesalahan</span>
+      </div>
+
+      <div class="alert alert-success hidden" id="register-success-alert">
+        <i class="fa-solid fa-circle-check"></i> <span id="register-success-text">Pendaftaran berhasil! Mengalihkan...</span>
+      </div>
+
+      <form id="form-register">
+        <div class="form-group">
+          <label for="register-name"><i class="fa-regular fa-user"></i> Nama Lengkap</label>
+          <input type="text" id="register-name" placeholder="contoh: Tessha Hermita" required>
+        </div>
+
+        <div class="form-group">
+          <label for="register-email"><i class="fa-regular fa-envelope"></i> Email / Username</label>
+          <input type="email" id="register-email" placeholder="contoh: owner@hifza.id" required>
+        </div>
+
+        <div class="form-group">
+          <label for="register-password"><i class="fa-solid fa-lock"></i> Kata Sandi Baru</label>
+          <input type="password" id="register-password" placeholder="••••••••" required>
+        </div>
+
+        <div class="form-group">
+          <label for="register-role"><i class="fa-solid fa-user-gear"></i> Peran Akun (Role)</label>
+          <div class="select-wrapper">
+            <select id="register-role" required>
+              <option value="Admin" selected>Admin (Kasir & Gudang)</option>
+              <option value="Auditor">Auditor (Log & Validasi)</option>
+              <option value="Owner">Owner (Pemilik Toko)</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="btn-submit-register">
+          Daftar Akun Baru &gt;
+        </button>
+
+        <div class="register-link">
+          Sudah punya akun? <a href="index.html">Masuk sekarang</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Global scripts -->
+  <!-- Supabase client CDN SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- bcryptjs client CDN SDK for client-side password hashing -->
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+  <!-- API Helper -->
+  <script src="js/api.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Inisialisasi API
+      try {
+        await API.initialize();
+      } catch (e) {
+        console.error("Gagal inisialisasi API:", e);
+      }
+
+      const formRegister = document.getElementById('form-register');
+      const errorAlert = document.getElementById('register-error-alert');
+      const errorText = document.getElementById('register-error-text');
+      const successAlert = document.getElementById('register-success-alert');
+      const btnSubmit = document.getElementById('btn-submit-register');
+
+      formRegister.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('register-name').value.trim();
+        const email = document.getElementById('register-email').value.trim();
+        const password = document.getElementById('register-password').value;
+        const role = document.getElementById('register-role').value;
+
+        // Reset alerts
+        errorAlert.classList.add('hidden');
+        successAlert.classList.add('hidden');
+
+        // Validasi password minimal panjangnya
+        if (password.length < 6) {
+          errorText.innerText = "Kata sandi minimal harus 6 karakter.";
+          errorAlert.classList.remove('hidden');
+          return;
+        }
+
+        try {
+          btnSubmit.disabled = true;
+          btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Memproses...`;
+
+          // Panggil API register
+          await API.register(email, password, role, name);
+
+          successAlert.classList.remove('hidden');
+          btnSubmit.innerHTML = `<i class="fa-solid fa-circle-check"></i> Berhasil Terdaftar!`;
+
+          // Pengalihan ke halaman login setelah 2 detik
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 2000);
+
+        } catch (err) {
+          btnSubmit.disabled = false;
+          btnSubmit.innerHTML = `Daftar Akun Baru &gt;`;
+          errorText.innerText = err.message || "Gagal melakukan pendaftaran.";
+          errorAlert.classList.remove('hidden');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

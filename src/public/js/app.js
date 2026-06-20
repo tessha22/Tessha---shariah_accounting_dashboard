@@ -77,14 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     showLogin();
   });
 
-  // --- REGISTER LINK HANDLING ---
-  const linkRegister = document.getElementById('link-register');
-  if (linkRegister) {
-    linkRegister.addEventListener('click', (e) => {
-      e.preventDefault();
-      alert('Fitur pendaftaran akun baru sedang dalam pengembangan.');
-    });
-  }
+
 
   function showLogin() {
     appContainer.classList.add('hidden');

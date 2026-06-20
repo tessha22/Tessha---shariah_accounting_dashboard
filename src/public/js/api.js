@@ -235,6 +235,71 @@ const API = (() => {
     // Mengekspos logAudit agar bisa digunakan di app.js jika diperlukan
     logAudit,
 
+    // 1b. REGISTER
+    register: async (username, password, role = 'Admin', name = '') => {
+      await delay(400);
+      const userId = 'usr-' + Math.random().toString(36).substr(2, 9);
+      
+      // Hash password using bcrypt if bcrypt is available
+      let hashedPassword = password;
+      const bcryptGlobal = window.bcrypt || (typeof dcodeIO !== 'undefined' && dcodeIO.bcrypt);
+      if (bcryptGlobal && bcryptGlobal.hashSync) {
+        hashedPassword = bcryptGlobal.hashSync(password, 10);
+      }
+      
+      if (isSupabaseMode) {
+        // Cek apakah username sudah ada
+        const { data: existingUser, error: checkError } = await supabaseClient
+          .from('users')
+          .select('id')
+          .eq('username', username)
+          .maybeSingle();
+
+        if (checkError) throw checkError;
+        if (existingUser) {
+          throw new Error('Username / Email sudah terdaftar.');
+        }
+
+        const { error } = await supabaseClient
+          .from('users')
+          .insert({
+            id: userId,
+            username: username,
+            password: hashedPassword,
+            role: role
+          });
+
+        if (error) throw error;
+
+        // Catat Audit Trail pendaftaran
+        await logAudit(userId, 'USER_REGISTER', `Pengguna baru ${name ? name + ' (' + username + ')' : username} terdaftar sebagai ${role} via Supabase.`);
+        return { id: userId, username, role };
+      }
+      else if (isServerMode) {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, role, name })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Pendaftaran gagal.');
+        return data.user;
+      } else {
+        const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS)) || [];
+        const existingUser = users.find(u => u.username === username);
+        if (existingUser) {
+          throw new Error('Username / Email sudah terdaftar.');
+        }
+
+        const newUser = { id: userId, username, password: hashedPassword, role };
+        users.push(newUser);
+        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+
+        logAuditOffline(userId, 'USER_REGISTER', `Pengguna baru ${name ? name + ' (' + username + ')' : username} terdaftar sebagai ${role} offline.`);
+        return { id: userId, username, role };
+      }
+    },
+
     // 1. LOGIN
     login: async (username, password) => {
       await delay(400);
